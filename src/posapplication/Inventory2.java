@@ -984,6 +984,7 @@ public class Inventory2 extends javax.swing.JFrame {
         ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.of("Africa/Lagos"));
         //calcaulte remaining days
         long remainingDays = ChronoUnit.DAYS.between(currentDateTime, expirationDateTime);
+        ///testing sth
         
         return Math.toIntExact(remainingDays);
     }
