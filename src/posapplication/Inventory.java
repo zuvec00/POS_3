@@ -40,6 +40,7 @@ public class Inventory extends javax.swing.JFrame {
         this.userEmail = userEmail;
         System.out.println(userEmail);
         sendLowStockAlerts(userEmail);
+        sendExpiringProdctsAlerts(userEmail);
         initComponents();
     }
 
@@ -698,14 +699,75 @@ public class Inventory extends javax.swing.JFrame {
                 itemCount = rs.getInt("item_count");
             }
             System.out.println("Low stock count: " + itemCount);
+            if(itemCount > 0){
+                sendAlertsToEmail("Low Stock Alert",userEmail, "A total of " + itemCount + " products are currently classified as low in stock."
+                    + "\nFor a detailed breakdown of these items and their stock levels, we recommend logging in to your dashboard.");
+            JOptionPane.showMessageDialog(rootPane, "You have items experiencing low stock levels.\nPlease navigate to the 'Low Stock Alert' tab for more detailed information.", 
+                    "Low Stock Alert", JOptionPane.INFORMATION_MESSAGE);
+
+            }
             
             
         }catch(Exception e){
             System.out.println("Error: " + e);
         }
     }
+    private void sendExpiringProdctsAlerts(String userEmail){
+        boolean alertShown1 = false;
+        boolean alertShown2 = false;
+        try{
+            
+           
+        //connect and insert to database 
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            System.out.println("Connected");
+            PreparedStatement ps = con.prepareStatement("select expiration_date from pau_products");
+            ResultSet rs = ps.executeQuery();
+            
+             
+            
+         //   tableModel.addRow(data);
+            while(rs.next()){
+                String expirationDateString = rs.getString("expiration_date");
+                
+                Date expirationDate = parseDateString(expirationDateString);
+                int remainingDays = calculateRemainingDays(expirationDate);
+                
+                System.out.println(remainingDays);
+                
+                if (remainingDays <= 10 && remainingDays > 0 && !alertShown1) {
+            sendAlertsToEmail("Expiring Stock Alert", userEmail, "Some of your stock items are approaching their expiration date."
+                    + "\nFor detailed information on these items and their respective expiration dates, please access your dashboard.");
+
+            JOptionPane.showMessageDialog(rootPane, "You have items approaching their expiration date.\nPlease navigate to the 'Expiration Alert' tab for more detailed information.",
+                    "Expiring Stock Alert", JOptionPane.INFORMATION_MESSAGE);
+
+            
+            alertShown1 = true;
+        }else if (remainingDays <= 0 && !alertShown2) {
+            sendAlertsToEmail("Expired Stock Alert", userEmail, "Some of your stock items have reached their expiration date."
+                    + "\nFor detailed information on these items and their respective expiration dates, please access your dashboard.");
+
+            JOptionPane.showMessageDialog(rootPane, "You have items that have reached their expiration date.\nPlease navigate to the 'Expiration Alert' tab for more detailed information.",
+                    "Expired Stock Alert", JOptionPane.INFORMATION_MESSAGE);
+
+            // Set the flag to true after showing the alert
+            alertShown2 = true;
+        }else{}
+                
+               // addToApporpriateTable(remainingDays,productCode, productName, expirationDateString, quanity);
+                
+                //tableModel.addRow(new Object[] {rs.getString(1),rs.getString(2),rs.getString(3),
+                    //rs.getString(4),rs.getInt(5),rs.getDouble(6),});
+            }
+            JOptionPane.showMessageDialog(rootPane, "Fetched Products Successfully");
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
     
-    private void sendAlertsToEmail(String emailID, String body){
+    private void sendAlertsToEmail(String subject, String emailID, String body){
         String senderEmail = "princeibekwe48@gmail.com";
          String senderPassword = "wjmurpoivizylxhc";
          Properties props = new Properties();
@@ -724,7 +786,7 @@ public class Inventory extends javax.swing.JFrame {
              Message message = new MimeMessage(session);
              message.setFrom(new InternetAddress(senderEmail));
              message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(emailID));
-             message.setSubject("POS Login Details");
+             message.setSubject(subject);
              message.setText(body);
              Transport.send(message);
              System.out.println("Email sent");
