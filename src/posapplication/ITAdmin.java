@@ -463,7 +463,7 @@ public class ITAdmin extends javax.swing.JFrame {
              jTextField3.setText("");
              jTextField4.setText("");
          }catch(Exception e){
-             
+             System.out.println("Error: " + e);
          }
           
     }

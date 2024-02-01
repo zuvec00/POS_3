@@ -14,6 +14,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static posapplication.ITAdmin.photo;
@@ -22,12 +29,17 @@ import static posapplication.ITAdmin.photo;
  *
  * @author New
  */
-public class Inventory2 extends javax.swing.JFrame {
+public class Inventory extends javax.swing.JFrame {
+    
+    private static String userEmail;
 
     /**
      * Creates new form Inventory2
      */
-    public Inventory2() {
+    public Inventory(String userEmail) {
+        this.userEmail = userEmail;
+        System.out.println(userEmail);
+        sendLowStockAlerts(userEmail);
         initComponents();
     }
 
@@ -667,12 +679,67 @@ public class Inventory2 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void sendLowStockAlerts(String userEmail){
+        int thresholdQuantity= 25;
+        try{
+            
+        //connect and insert to database 
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            System.out.println("Connected");
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS item_count FROM pau_products WHERE quantity < ?"); 
+            ps.setInt(1, thresholdQuantity);
+            ResultSet rs = ps.executeQuery();
+            
+            // Retrieve the count from the ResultSet
+            int itemCount = 0; // Initialize with a default value
+            if (rs.next()) {
+                itemCount = rs.getInt("item_count");
+            }
+            System.out.println("Low stock count: " + itemCount);
+            
+            
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+    
+    private void sendAlertsToEmail(String emailID, String body){
+        String senderEmail = "princeibekwe48@gmail.com";
+         String senderPassword = "wjmurpoivizylxhc";
+         Properties props = new Properties();
+         props.put("mail.smtp.auth","true");
+         props.put("mail.smtp.starttls.enable", "true");
+         props.put("mail.smtp.host","smtp.gmail.com");
+         props.put("mail.smtp.port","587");
+         
+         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+             protected PasswordAuthentication getPasswordAuthentication(){
+                 return new PasswordAuthentication(senderEmail, senderPassword);
+             }
+         });
+         
+         try{
+             Message message = new MimeMessage(session);
+             message.setFrom(new InternetAddress(senderEmail));
+             message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(emailID));
+             message.setSubject("POS Login Details");
+             message.setText(body);
+             Transport.send(message);
+             System.out.println("Email sent");
+            
+         }catch(Exception e){
+             System.out.println("Error: " + e);
+         }
+          
+    }
     private void jTable1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTable1AncestorAdded
         try{
 
             //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");
             ResultSet rs = ps.executeQuery();
@@ -714,7 +781,7 @@ public class Inventory2 extends javax.swing.JFrame {
              
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("insert into pau_products values (?,?,?,?,?,?)");
             
@@ -742,7 +809,7 @@ public class Inventory2 extends javax.swing.JFrame {
             tableModel.setRowCount(0);
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");           
             ResultSet rs = ps.executeQuery();
@@ -767,7 +834,7 @@ public class Inventory2 extends javax.swing.JFrame {
             System.out.println(productCode);
             //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pau_products WHERE product_code = ?");  
             ps.setString(1,productCode);
@@ -804,7 +871,7 @@ public class Inventory2 extends javax.swing.JFrame {
 
             //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");
             ResultSet rs = ps.executeQuery();
@@ -845,7 +912,7 @@ public class Inventory2 extends javax.swing.JFrame {
         try{
              //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("UPDATE pau_products SET product_name = ?, manufacturing_date = ?, expiration_date = ?, quantity = ?, price = ? WHERE product_code = ?");
             
@@ -876,7 +943,7 @@ public class Inventory2 extends javax.swing.JFrame {
             tableModel.setRowCount(0);
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");           
             ResultSet rs = ps.executeQuery();
@@ -904,7 +971,7 @@ public class Inventory2 extends javax.swing.JFrame {
             tableModel.setRowCount(0);
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products where quantity < ?"); 
             ps.setInt(1, thresholdQuantity);
@@ -933,7 +1000,7 @@ public class Inventory2 extends javax.swing.JFrame {
            
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select product_code, product_name, expiration_date, quantity  from pau_products");
             ResultSet rs = ps.executeQuery();
@@ -1041,20 +1108,21 @@ public class Inventory2 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Inventory2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Inventory2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Inventory2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Inventory2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Inventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Inventory2().setVisible(true);
+                new Inventory(userEmail).setVisible(true);
             }
         });
     }

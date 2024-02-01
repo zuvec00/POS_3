@@ -123,7 +123,7 @@ public class Login extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
-            PreparedStatement ps = con.prepareStatement("select Role,Email from pau_staff where Email=? and Password = ?");
+            PreparedStatement ps = con.prepareStatement("select role,email_id from pau_staff where email_id=? and password = ?");
             ps.setString(1,email);
             ps.setString(2,password);
             
@@ -143,7 +143,9 @@ public class Login extends javax.swing.JFrame {
                 if ("Sales".equals(staffRole)) {
                      // Sales()
                 } else if ("Inventory".equals(staffRole)) {
-                    // Inventroy()
+                   Inventory inventory = new Inventory(staffEmail);
+                   inventory.show();
+                   dispose();
                 } else if ("IT admin".equals(staffRole)) {
                     ITAdmin registration1 = new ITAdmin();
                     registration1.show();
