@@ -23,11 +23,14 @@ import javax.swing.table.DefaultTableModel;
  * @author isms
  */
 public class Sales extends javax.swing.JFrame {
+    
+    private static String cashierEmail;
 
     /**
      * Creates new form Sales
      */
-    public Sales() {
+    public Sales(String cashierEmail) {
+        this.cashierEmail = cashierEmail;
         initComponents();
     }
 
@@ -57,6 +60,7 @@ public class Sales extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,6 +121,13 @@ public class Sales extends javax.swing.JFrame {
 
         jLabel7.setText("NGN");
 
+        jButton4.setText("CHECKOUT");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,12 +172,17 @@ public class Sales extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
-                .addGap(110, 110, 110))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
+                        .addGap(110, 110, 110))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +219,9 @@ public class Sales extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8))
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addGap(44, 44, 44)
+                .addComponent(jButton4)
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         pack();
@@ -217,7 +235,7 @@ public class Sales extends javax.swing.JFrame {
             System.out.println(productCode);
             //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pau_products WHERE product_code = ?");  
             ps.setString(1,productCode);
@@ -267,7 +285,7 @@ public class Sales extends javax.swing.JFrame {
         
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pau_products WHERE product_code = ?");  
             ps.setString(1,productCode);
@@ -323,8 +341,16 @@ public class Sales extends javax.swing.JFrame {
         "The product is not in the cart.\n"
                 + "If you need to add product, please use the 'Add To Cart' button.",
         "Unable to Update Cart", JOptionPane.INFORMATION_MESSAGE);
-        }        // TODO add your handling code here:
+        }        // TODO add your %handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+         DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+        double totalAmount = Double.parseDouble(jLabel8.getText());
+        Checkout checkout = new Checkout(tableModel,totalAmount,"princeibekwe48@gmail.com"); 
+        checkout.show();
+        dispose();// TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void calculateTotalCost(){
         // Assuming your JTable is named jTable1
@@ -412,7 +438,7 @@ public class Sales extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Sales().setVisible(true);
+                new Sales(cashierEmail).setVisible(true);
             }
         });
     }
@@ -421,6 +447,7 @@ public class Sales extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
