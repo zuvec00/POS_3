@@ -190,7 +190,9 @@ public class Checkout extends javax.swing.JFrame {
         //updateItemsSoldToDb;
         updateItemsSoldToDB();
            
-        //stock performance
+        //stock performancedsdf
+        
+        
          String productName = "";
         int quantity = 0;
         int totalQuantitySold = 0;
