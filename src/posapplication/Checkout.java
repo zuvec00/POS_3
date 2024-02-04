@@ -19,6 +19,8 @@ import static java.awt.print.Printable.NO_SUCH_PAGE;
 import static java.awt.print.Printable.PAGE_EXISTS;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.ImageIcon;
@@ -184,8 +186,46 @@ public class Checkout extends javax.swing.JFrame {
         
         // sales performance
         updateCashierSalesPerformance();
-            // T
+        
+        //updateItemsSoldToDb;
+        updateItemsSoldToDB();
+           
         //stock performance
+         String productName = "";
+        int quantity = 0;
+        int totalQuantitySold = 0;
+        double pricePerQuantity = 0.0;
+        double totalAmountSold = 0.0;
+        
+        int rowCount = tableModel.getRowCount();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            System.out.println("Connected");
+            PreparedStatement ps = con.prepareStatement("insert into product_performance values (?,?,?)");
+            
+            //get quantity and price
+            for (int i = 0; i < rowCount; i++) {
+                 productName = String.valueOf(tableModel.getValueAt(i, 0));
+                 quantity = Integer.parseInt(String.valueOf(tableModel.getValueAt(i, 1)));
+                 pricePerQuantity = Double.parseDouble(String.valueOf(tableModel.getValueAt(i, 2)));
+
+               totalQuantitySold += quantity;
+               totalAmountSold += quantity * pricePerQuantity;
+            }
+
+            
+            ps.setString(1, productName);
+            ps.setInt(2, totalQuantitySold);
+            ps.setDouble(3, totalAmountSold);
+            //ps.setString(4, formattedDate);
+            
+            int rs = ps.executeUpdate();
+            System.out.println("Inserted");
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -306,6 +346,48 @@ public class Checkout extends javax.swing.JFrame {
           return result;    
       }
    }
+    
+    private void updateItemsSoldToDB(){
+        String productName = "";
+        int quantity = 0;
+        double pricePerQuantity = 0.0;
+        int rowCount = tableModel.getRowCount();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            System.out.println("Connected");
+            PreparedStatement ps = con.prepareStatement("insert into product_sold values (?,?,?,?)");
+            
+            //get quantity and price
+            for (int i = 0; i < rowCount; i++) {
+                 productName = String.valueOf(tableModel.getValueAt(i, 0));
+                 quantity = Integer.parseInt(String.valueOf(tableModel.getValueAt(i, 1)));
+                 pricePerQuantity = Double.parseDouble(String.valueOf(tableModel.getValueAt(i, 2)));
+
+               // totalQuantity += quantity;
+               // totalAmount += quantity * pricePerQuantity;
+            }
+             // Get today's date
+            LocalDate today = LocalDate.now();
+
+            // Format the date as dd/MM/yyyy
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String formattedDate = today.format(formatter);
+
+            System.out.println("Today's date: " + formattedDate);
+            
+            ps.setString(1, productName);
+            ps.setInt(2, quantity);
+            ps.setDouble(3, pricePerQuantity);
+            ps.setString(4, formattedDate);
+            
+            int rs = ps.executeUpdate();
+            System.out.println("Inserted");
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+        
+    }
     
    private void updateStockQuantityDB(){
        int rowCount = tableModel.getRowCount();
