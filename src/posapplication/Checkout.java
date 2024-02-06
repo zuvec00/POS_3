@@ -191,42 +191,7 @@ public class Checkout extends javax.swing.JFrame {
         updateItemsSoldToDB();
            
         //stock performancedsdf
-        
-        
-         String productName = "";
-        int quantity = 0;
-        int totalQuantitySold = 0;
-        double pricePerQuantity = 0.0;
-        double totalAmountSold = 0.0;
-        
-        int rowCount = tableModel.getRowCount();
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
-            System.out.println("Connected");
-            PreparedStatement ps = con.prepareStatement("insert into product_performance values (?,?,?)");
-            
-            //get quantity and price
-            for (int i = 0; i < rowCount; i++) {
-                 productName = String.valueOf(tableModel.getValueAt(i, 0));
-                 quantity = Integer.parseInt(String.valueOf(tableModel.getValueAt(i, 1)));
-                 pricePerQuantity = Double.parseDouble(String.valueOf(tableModel.getValueAt(i, 2)));
-
-               totalQuantitySold += quantity;
-               totalAmountSold += quantity * pricePerQuantity;
-            }
-
-            
-            ps.setString(1, productName);
-            ps.setInt(2, totalQuantitySold);
-            ps.setDouble(3, totalAmountSold);
-            //ps.setString(4, formattedDate);
-            
-            int rs = ps.executeUpdate();
-            System.out.println("Inserted");
-        }catch(Exception e){
-            System.out.println("Error: " + e);
-        }
+        updateStockPerformance();
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -348,6 +313,56 @@ public class Checkout extends javax.swing.JFrame {
           return result;    
       }
    }
+    private void updateStockPerformance(){
+         String productName = "";
+        int quantity = 0;
+        int totalQuantitySold = 0;
+        double pricePerQuantity = 0.0;
+        double totalAmountSold = 0.0;
+        
+        int rowCount = tableModel.getRowCount();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            System.out.println("Connected");
+            PreparedStatement ps = con.prepareStatement("insert into product_performance values (?,?,?)");
+            PreparedStatement psUpdate = con.prepareStatement("UPDATE product_performance SET total_quantity_sold = total_quantity_sold + ?, total_amount_sold = total_amount_sold + ? WHERE product_name = ?");
+            
+            
+            //get quantity and price
+            for (int i = 0; i < rowCount; i++) {
+                 productName = String.valueOf(tableModel.getValueAt(i, 0));
+                 quantity = Integer.parseInt(String.valueOf(tableModel.getValueAt(i, 1)));
+                 pricePerQuantity = Double.parseDouble(String.valueOf(tableModel.getValueAt(i, 2)));
+
+                totalQuantitySold += quantity;
+                totalAmountSold += quantity * pricePerQuantity;
+                
+                if(checkForProducts(productName)){
+                    psUpdate.setInt(1, totalQuantitySold);
+                    psUpdate.setDouble(2,totalAmountSold);
+                    psUpdate.setString(3, productName);
+                    
+                    int rsUpdate = psUpdate.executeUpdate();
+                     System.out.println("update product in product perfromance table");
+                }else{
+                     ps.setString(1, productName);
+                    ps.setInt(2, totalQuantitySold);
+                    ps.setDouble(3, totalAmountSold);
+                //ps.setString(4, formattedDate);
+            
+                int rs = ps.executeUpdate();
+                System.out.println("Inserted to product perfromance table");
+                }
+               
+            }
+
+            
+           
+        }catch(Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
     
     private void updateItemsSoldToDB(){
         String productName = "";
@@ -368,23 +383,25 @@ public class Checkout extends javax.swing.JFrame {
 
                // totalQuantity += quantity;
                // totalAmount += quantity * pricePerQuantity;
+               
+                     // Get today's date
+                LocalDate today = LocalDate.now();
+
+                // Format the date as dd/MM/yyyy
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String formattedDate = today.format(formatter);
+
+                System.out.println("Today's date: " + formattedDate);
+            
+                ps.setString(1, productName);
+                ps.setInt(2, quantity);
+                ps.setDouble(3, pricePerQuantity);
+                ps.setString(4, formattedDate);
+            
+                int rs = ps.executeUpdate();
+                System.out.println("Inserted");
             }
-             // Get today's date
-            LocalDate today = LocalDate.now();
-
-            // Format the date as dd/MM/yyyy
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String formattedDate = today.format(formatter);
-
-            System.out.println("Today's date: " + formattedDate);
             
-            ps.setString(1, productName);
-            ps.setInt(2, quantity);
-            ps.setDouble(3, pricePerQuantity);
-            ps.setString(4, formattedDate);
-            
-            int rs = ps.executeUpdate();
-            System.out.println("Inserted");
         }catch(Exception e){
             System.out.println("Error: " + e);
         }
@@ -511,6 +528,33 @@ public class Checkout extends javax.swing.JFrame {
                 itemCount = rs.getInt("cashier_present");
             }
             System.out.println("cashier Present: " + itemCount);
+            
+            
+       }catch(Exception e){
+           System.out.println("Error: "+e);
+       }
+       if(itemCount>0){
+                return true;
+            }else{
+                return false;
+            }
+   }
+   private boolean checkForProducts(String productName){
+       int itemCount=0;
+       try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            System.out.println("Connected");
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS cashier_present FROM product_performance WHERE product_name = ?"); 
+            ps.setString(1, productName);
+            ResultSet rs = ps.executeQuery();
+            
+            // Retrieve the count from the ResultSet
+            //int itemCount = 0; // Initialize with a default value
+            if (rs.next()) {
+                itemCount = rs.getInt("cashier_present");
+            }
+            System.out.println("No of Product Present: " + itemCount);
             
             
        }catch(Exception e){
