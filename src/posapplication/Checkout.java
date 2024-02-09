@@ -385,7 +385,7 @@ public class Checkout extends javax.swing.JFrame {
                // totalAmount += quantity * pricePerQuantity;
                
                      // Get today's date
-                LocalDate today = LocalDate.now();
+                LocalDate today = LocalDate.of(2022,2,8);
 
                 // Format the date as dd/MM/yyyy
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
