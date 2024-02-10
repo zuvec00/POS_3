@@ -34,6 +34,7 @@ public class SalesManager extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,6 +65,14 @@ public class SalesManager extends javax.swing.JFrame {
 
         jLabel2.setText("jLabel2");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("LOGOUT");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,6 +91,10 @@ public class SalesManager extends javax.swing.JFrame {
                 .addGap(157, 157, 157)
                 .addComponent(jButton2)
                 .addGap(34, 34, 34))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,7 +108,9 @@ public class SalesManager extends javax.swing.JFrame {
                     .addComponent(jButton3)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -121,6 +136,12 @@ public class SalesManager extends javax.swing.JFrame {
                     generateReport.show();
                     dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+         Login login = new Login();
+                   login.show();
+                   dispose();            // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -163,5 +184,6 @@ public class SalesManager extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

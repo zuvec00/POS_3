@@ -39,25 +39,31 @@ public class Report extends javax.swing.JFrame {
         
          
         if(timeframe.equals("Daily")){
-             chart.setTitle("Daily Report");
-            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            chart2.setTitle("Daily Report");
+            chart2.addLegend("Amount", Color.decode("#7b4397"), new Color(51, 153, 255)); // A shade of blue
             setDailyData();
         }else if(timeframe.equals("Weekly")){
-            chart.setTitle("Weekly Report");
-            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            chart2.setTitle("Weekly Report");
+           chart2.addLegend("Amount", Color.decode("#7b4397"), new Color(51, 153, 255)); // A shade of blue
+
             setWeeklyData();
         }else if(timeframe.equals("Monthly")){
-            chart.setTitle("Monthly Report");
-            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            chart2.setTitle("Monthly Report");
+           chart2.addLegend("Amount", Color.decode("#7b4397"), new Color(51, 153, 255)); // A shade of blue
+
             setMonthlyData();
         }else if (timeframe.equals("Yearly")){
-            chart.setTitle("Yearly Report");
-            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            chart2.setTitle("Yearly Report");
+            chart2.addLegend("Amount", Color.decode("#7b4397"), new Color(51, 153, 255)); // A shade of blue
+
             setYearlyData();
         }else{
            // JOptionPane.showMessageDialog(rootPane, "Please choose a timeframe");
         }
+        //chart2.addLegend("Amount", Color.decode("#7b4397"), new Color(51, 153, 255)); // A shade of blue
+
        
+       // setDailyData();
         
         //chart.addLegend("Cost", Color.decode("#e65c00"), Color.decode("#F9D423"));
         //chart.addLegend("Profit", Color.decode("#0099F7"), Color.decode("#F11712"));
@@ -75,6 +81,8 @@ public class Report extends javax.swing.JFrame {
         curveLineChart1 = new raven.chart.CurveLineChart();
         panelShadow1 = new raven.panel.PanelShadow();
         chart = new raven.chart.CurveLineChart();
+        panelShadow2 = new raven.panel.PanelShadow();
+        chart2 = new raven.chart.CurveLineChart();
 
         panelShadow1.setBackground(new java.awt.Color(34, 59, 68));
         panelShadow1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -99,15 +107,34 @@ public class Report extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        panelShadow2.setBackground(new java.awt.Color(34, 59, 68));
+        panelShadow2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelShadow2.setColorGradient(new java.awt.Color(17, 38, 47));
+
+        chart2.setFillColor(true);
+
+        javax.swing.GroupLayout panelShadow2Layout = new javax.swing.GroupLayout(panelShadow2);
+        panelShadow2.setLayout(panelShadow2Layout);
+        panelShadow2Layout.setHorizontalGroup(
+            panelShadow2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelShadow2Layout.createSequentialGroup()
+                .addComponent(chart2, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelShadow2Layout.setVerticalGroup(
+            panelShadow2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(chart2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
+            .addComponent(panelShadow2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
+            .addComponent(panelShadow2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -124,8 +151,9 @@ public class Report extends javax.swing.JFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT date_sold, SUM(quantity*price_per_quantity) AS total_amount " +
-                    "FROM product_sold " + "WHERE date_sold BETWEEN ? AND ? " +
+                    "FROM product_sold " + "WHERE STR_TO_DATE(date_sold, '%d/%m/%Y') BETWEEN STR_TO_DATE(?, '%d/%m/%Y') AND STR_TO_DATE(?, '%d/%m/%Y') " +
                     "GROUP BY date_sold");
+
             
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String startDateString = startDate.format(formatter);
@@ -167,11 +195,11 @@ public class Report extends javax.swing.JFrame {
         for(Map.Entry<String,Double> entry: salesData.entrySet()){
             String date = entry.getKey();
             double totalAmount = entry.getValue();
-             chart.addData(new ModelChart(date,new double[]{totalAmount}));
+             chart2.addData(new ModelChart(date,new double[]{totalAmount}));
         }
                
                
-            chart.start();
+            chart2.start();
         }catch(Exception e){
             System.out.println("Error: " + e);
         }
@@ -241,11 +269,11 @@ public class Report extends javax.swing.JFrame {
         for(Map.Entry<String,Double> entry: weeklySalesData.entrySet()){
             String week = entry.getKey();
             double totalAmount = entry.getValue();
-             chart.addData(new ModelChart(week,new double[]{totalAmount}));
+             chart2.addData(new ModelChart(week,new double[]{totalAmount}));
         }
                
                
-            chart.start();
+            chart2.start();
         }catch(Exception e){
             System.out.println("Error: " + e);
         }
@@ -315,10 +343,10 @@ public class Report extends javax.swing.JFrame {
         for (Map.Entry<String, Double> entry : monthlySalesData.entrySet()) {
             String monthLabel = entry.getKey();
             double totalAmount = entry.getValue();
-            chart.addData(new ModelChart(monthLabel, new double[]{totalAmount}));
+            chart2.addData(new ModelChart(monthLabel, new double[]{totalAmount}));
         }
 
-        chart.start();
+        chart2.start();
     } catch (Exception e) {
         System.out.println("Error: " + e);
     }
@@ -401,12 +429,12 @@ while (rs.next()) {
 for (Map.Entry<String, Double> entry : yearlySalesData.entrySet()) {
     String yearLabel = entry.getKey();
     double totalAmount = entry.getValue();
-    chart.addData(new ModelChart(yearLabel, new double[]{totalAmount}));
+    chart2.addData(new ModelChart(yearLabel, new double[]{totalAmount}));
 }
 
 
 
-        chart.start();
+        chart2.start();
     } catch (Exception e) {
         System.out.println("Error: " + e);
     }
@@ -453,7 +481,9 @@ for (Map.Entry<String, Double> entry : yearlySalesData.entrySet()) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private raven.chart.CurveLineChart chart;
+    private raven.chart.CurveLineChart chart2;
     private raven.chart.CurveLineChart curveLineChart1;
     private raven.panel.PanelShadow panelShadow1;
+    private raven.panel.PanelShadow panelShadow2;
     // End of variables declaration//GEN-END:variables
 }
