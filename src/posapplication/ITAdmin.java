@@ -14,12 +14,18 @@ import java.sql.PreparedStatement;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.security.SecureRandom;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -61,6 +67,7 @@ public class ITAdmin extends javax.swing.JFrame {
         this.userName = userName;
         initComponents();
         setUserName();
+        checkBirthdays();
     }
 
     /**
@@ -76,6 +83,7 @@ public class ITAdmin extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -124,6 +132,13 @@ public class ITAdmin extends javax.swing.JFrame {
             }
         });
 
+        jButton9.setText("Schedule Backup");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,9 +146,14 @@ public class ITAdmin extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12))
-                .addContainerGap(209, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addContainerGap(260, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton9)
+                        .addGap(37, 37, 37))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,8 +161,10 @@ public class ITAdmin extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addGap(28, 28, 28))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jButton9))
+                .addGap(26, 26, 26))
         );
 
         jLabel3.setText("FIRST NAME");
@@ -306,9 +328,20 @@ public class ITAdmin extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(jButton8)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton7))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
@@ -348,35 +381,21 @@ public class ITAdmin extends javax.swing.JFrame {
                                                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jButton1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(20, 20, 20)
-                                        .addComponent(jButton6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                    .addComponent(jButton1)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(20, 20, 20)
-                                                .addComponent(jButton4)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(8, 8, 8))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)
-                        .addContainerGap())))
+                                            .addComponent(jButton6)
+                                            .addComponent(jButton4))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(151, 151, 151))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -443,7 +462,35 @@ public class ITAdmin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    
+     public void checkBirthdays() {
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String currentDateString = currentDate.format(formatter);
+
+        // Connect to the database
+        String url = "jdbc:mysql://localhost:3306/pau_pos";
+        String user = "root";
+        String password = "root";
+        
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            // Query the database for birthdays matching the current date
+            String query = "SELECT first_name, last_name FROM pau_staff WHERE DATE_FORMAT(dob, '%d/%m') = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, currentDateString);
+            ResultSet rs = ps.executeQuery();
+            
+            // Display pop-up notifications for each matching birthday
+            while (rs.next()) {
+                String name = rs.getString("first_name")+ rs.getString("last_name");        
+                String message = "Happy Birthday, " + name + "!";
+                JOptionPane.showMessageDialog(null, message, "Birthday Notification", JOptionPane.INFORMATION_MESSAGE);
+               // sendBirthdayEmail();
+            }
+        } catch (Exception e) {
+           System.out.println("Error: "+e);
+        }
+    }
     private void setUserName(){
         jLabel11.setText("Hello, " + userName);
     }
@@ -490,7 +537,7 @@ public class ITAdmin extends javax.swing.JFrame {
             
             //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("insert into pau_staff values (?,?,?,?,?,?,?,?,?)");
             
@@ -565,7 +612,7 @@ public class ITAdmin extends javax.swing.JFrame {
            try{
                //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             String newPassword = generatePassword();
             PreparedStatement ps = con.prepareStatement("update pau_staff set password=? where email_id=?");
@@ -611,7 +658,7 @@ public class ITAdmin extends javax.swing.JFrame {
 
             //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_staff");
             ResultSet rs = ps.executeQuery();
@@ -656,7 +703,7 @@ public class ITAdmin extends javax.swing.JFrame {
         try{
              //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root");
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("UPDATE pau_staff SET email_id = ?, first_name = ?, last_name = ?, dob = ?, gender = ?, phone_number = ?, role = ? WHERE email_id = ?");
             
@@ -683,7 +730,7 @@ public class ITAdmin extends javax.swing.JFrame {
 
             //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_staff");
             ResultSet rs = ps.executeQuery();
@@ -709,7 +756,7 @@ public class ITAdmin extends javax.swing.JFrame {
             System.out.println(userEmail);
             //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pau_staff WHERE email_id = ?");  
             ps.setString(1,userEmail);
@@ -769,7 +816,64 @@ public class ITAdmin extends javax.swing.JFrame {
                    login.show();
                    dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jLabel12MouseClicked
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        scheduleSchemaDownload(23,00,00);       // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
     
+    public void scheduleSchemaDownload(int hour, int minute, int second) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                String url = "jdbc:mysql://localhost:3306/pau_pos";
+                String user = "root";
+                String password = "root";
+                String fileName = "schema.txt";
+                try {
+                    Connection conn = DriverManager.getConnection(url, user, password);
+                    DatabaseMetaData metaData = conn.getMetaData();
+
+                    ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+                    try (FileWriter writer = new FileWriter(fileName)) {
+                        while (tables.next()) {
+                            String tableName = tables.getString("TABLE_NAME");
+                            writer.write("Table: " + tableName + "\n");
+
+                            ResultSet columns = metaData.getColumns(null, null, tableName, null);
+                            while (columns.next()) {
+                                String columnName = columns.getString("COLUMN_NAME");
+                                String dataType = columns.getString("TYPE_NAME");
+                                writer.write("  Column: " + columnName + ", Type: " + dataType + "\n");
+                            }
+                            columns.close();
+                        }
+                    }
+                    tables.close();
+                    conn.close();
+
+                    System.out.println("Schema downloaded successfully.");
+                    //JOptionPane.showMessageDialog(rootPane, "BackUp Complete");
+                   // JOptionPane.showMessageDialog(rootPane,"bACK UP Complete");
+                } catch (Exception e) {
+                  System.out.println(e);
+                }
+            }
+        }, getTimeInMillis(hour, minute, second), 24 * 60 * 60 * 1000);
+    }
+
+    private static long getTimeInMillis(int hour, int minute, int second) {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, hour);
+        calendar.set(java.util.Calendar.MINUTE, minute);
+        calendar.set(java.util.Calendar.SECOND, second);
+        long currentTime = System.currentTimeMillis();
+        long targetTime = calendar.getTimeInMillis();
+        if (targetTime <= currentTime) {
+            targetTime += 24 * 60 * 60 * 1000;
+        }
+        return targetTime - currentTime;
+    }
     private static Date parseDateString(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -912,6 +1016,7 @@ public class ITAdmin extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JFileChooser jFileChooser1;

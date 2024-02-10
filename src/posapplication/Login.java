@@ -159,7 +159,7 @@ public class Login extends javax.swing.JFrame {
             String password = jPasswordField1.getText();
             System.out.println(password);
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT role, email_id, first_name, last_name FROM pau_staff WHERE email_id= ? and password = ?");
             ps.setString(1,email);

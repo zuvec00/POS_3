@@ -4,9 +4,18 @@
  */
 package posapplication;
 
+import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,18 +34,11 @@ public class DatabaseBackup {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        exportDatabase();
+        scheduleSchemaDownload(23,00,00);
        // uploadToGoogleDrive();
         // TODO code application logic here
     }
     
-    private static void exportDatabase(String databaseName, String url) {
-        Process p = null;
-        try{
-            Runtime runtime = Runtime.getRuntime();
-            p = runtime.exec("mysqldump -uroot -proot --add-drop-databse -B " + databaseName + " -r" + "" + url
-                + ""+ "" +databaseName +"" + ".sql");
-        }catch(Exception e){}
-    }
+    
     
 }

@@ -742,7 +742,7 @@ public class Inventory extends javax.swing.JFrame {
             
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS item_count FROM pau_products WHERE quantity < ?"); 
             ps.setInt(1, thresholdQuantity);
@@ -775,7 +775,7 @@ public class Inventory extends javax.swing.JFrame {
            
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select expiration_date from pau_products");
             ResultSet rs = ps.executeQuery();
@@ -856,7 +856,7 @@ public class Inventory extends javax.swing.JFrame {
 
             //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");
             ResultSet rs = ps.executeQuery();
@@ -898,7 +898,7 @@ public class Inventory extends javax.swing.JFrame {
              
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("insert into pau_products values (?,?,?,?,?,?)");
             
@@ -926,7 +926,7 @@ public class Inventory extends javax.swing.JFrame {
             tableModel.setRowCount(0);
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");           
             ResultSet rs = ps.executeQuery();
@@ -951,7 +951,7 @@ public class Inventory extends javax.swing.JFrame {
             System.out.println(productCode);
             //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("SELECT * FROM pau_products WHERE product_code = ?");  
             ps.setString(1,productCode);
@@ -988,7 +988,7 @@ public class Inventory extends javax.swing.JFrame {
 
             //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");
             ResultSet rs = ps.executeQuery();
@@ -1029,7 +1029,7 @@ public class Inventory extends javax.swing.JFrame {
         try{
              //connect and insert to database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("UPDATE pau_products SET product_name = ?, manufacturing_date = ?, expiration_date = ?, quantity = ?, price = ? WHERE product_code = ?");
             
@@ -1060,7 +1060,7 @@ public class Inventory extends javax.swing.JFrame {
             tableModel.setRowCount(0);
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products");           
             ResultSet rs = ps.executeQuery();
@@ -1088,7 +1088,7 @@ public class Inventory extends javax.swing.JFrame {
             tableModel.setRowCount(0);
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select * from pau_products where quantity < ?"); 
             ps.setInt(1, thresholdQuantity);
@@ -1117,7 +1117,7 @@ public class Inventory extends javax.swing.JFrame {
            
         //connect and insert to database 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
             System.out.println("Connected");
             PreparedStatement ps = con.prepareStatement("select product_code, product_name, expiration_date, quantity  from pau_products");
             ResultSet rs = ps.executeQuery();
