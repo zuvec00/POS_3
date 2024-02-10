@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -22,7 +23,9 @@ import javax.mail.internet.MimeMessage;
  */
 public class Login extends javax.swing.JFrame {
     String staffRole = "";
-    String staffEmail = null;
+    String staffEmail = "";
+    String staffFirstName = "";
+    String staffLastName = "";
 
     /**
      * Creates new form Login
@@ -46,22 +49,30 @@ public class Login extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("E-mail");
+        jLabel1.setText("E-MAIL");
 
-        jLabel2.setText("Password");
+        jLabel2.setText("PASSWORD");
 
-        jButton1.setText("Login");
+        jButton1.setBackground(new java.awt.Color(0, 51, 153));
+        jButton1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("LOGIN");
+        jButton1.setOpaque(true);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jPasswordField1.setText("prince");
+        jPasswordField1.setText("password");
 
+        jLabel3.setForeground(new java.awt.Color(0, 51, 153));
         jLabel3.setText(" Forgot Password?");
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -69,47 +80,74 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        jLabel4.setText("COOPERATIVE");
+
+        jLabel5.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        jLabel5.setText("POINT OF SALE");
+
+        jCheckBox1.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jCheckBox1.setText("Show password");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(66, 66, 66)
+                                .addComponent(jLabel5))
+                            .addComponent(jLabel4))
+                        .addGap(129, 129, 129))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(203, 203, 203))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(72, 72, 72))
+                .addGap(125, 125, 125)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField1)
+                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
+                .addGap(52, 52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(113, 113, 113)
+                .addGap(15, 15, 15)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jButton1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addGap(76, 76, 76))))
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(25, 25, 25))
         );
 
         pack();
@@ -119,19 +157,21 @@ public class Login extends javax.swing.JFrame {
         try{
             String email = jTextField1.getText();
             String password = jPasswordField1.getText();
-            
+            System.out.println(password);
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","root")    ;
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pau_pos","root","Hearty.2010")    ;
             System.out.println("Connected");
-            PreparedStatement ps = con.prepareStatement("select role,email_id from pau_staff where email_id=? and password = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT role, email_id, first_name, last_name FROM pau_staff WHERE email_id= ? and password = ?");
             ps.setString(1,email);
             ps.setString(2,password);
             
-            java.sql.ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             
             while(rs.next()){
                staffRole = rs.getString(1);
-               staffEmail= rs.getString(2);   
+               staffEmail= rs.getString(2);
+               staffFirstName = rs.getString(3);
+               staffLastName = rs.getString(4);
                
                System.out.println("Staffrole: " + staffRole);
             }
@@ -141,22 +181,26 @@ public class Login extends javax.swing.JFrame {
                jPasswordField1.setText(null);
             }else{
                 if ("Sales".equals(staffRole)) {
-                     // Sales()
+                     SalesManager salesManager = new SalesManager(staffEmail, staffFirstName + " " + staffLastName);
+                    salesManager.show();
+                    dispose();
                 } else if ("Inventory".equals(staffRole)) {
-                   Inventory inventory = new Inventory(staffEmail);
+                   Inventory inventory = new Inventory(staffEmail, staffFirstName + " " + staffLastName);
                    inventory.show();
                    dispose();
                 } else if ("IT admin".equals(staffRole)) {
-                    ITAdmin registration1 = new ITAdmin();
+                    ITAdmin registration1 = new ITAdmin(staffFirstName + " " + staffLastName);
                     registration1.show();
                     dispose();
-                } else {
-                    // Default case (do nothing)
+                } else if("Cashier".equals(staffRole)){
+                     Sales sales = new Sales(staffEmail, staffFirstName + " " + staffLastName);
+                    sales.show();
+                    dispose();
                 }
 
             }
         }catch(Exception e){
-            
+           System.out.println("Error: "+ e); 
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -165,6 +209,15 @@ public class Login extends javax.swing.JFrame {
          sendEmailToAdmin(userEmail);
          // TODO add your handling code here:
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        if (jCheckBox1.isSelected()){
+        jPasswordField1.setEchoChar((char)0);
+        }
+        else{
+        jPasswordField1.setEchoChar('*');
+        }            // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void sendEmailToAdmin(String emailID){
         String senderEmail = "princeibekwe48@gmail.com";
@@ -231,9 +284,12 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables

@@ -26,16 +26,38 @@ import raven.chart.ModelChart;
  *
  * @author New
  */
-public class DailyReport extends javax.swing.JFrame {
+public class Report extends javax.swing.JFrame {
+    
+    private static String timeframe;
 
     /**
      * Creates new form Reports
      */
-    public DailyReport() {
+    public Report(String timeframe) {
+        this.timeframe = timeframe;
         initComponents();
-        chart.setTitle("Daily Report");
-        chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
-        setYearlyData();
+        
+         
+        if(timeframe.equals("Daily")){
+             chart.setTitle("Daily Report");
+            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            setDailyData();
+        }else if(timeframe.equals("Weekly")){
+            chart.setTitle("Weekly Report");
+            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            setWeeklyData();
+        }else if(timeframe.equals("Monthly")){
+            chart.setTitle("Monthly Report");
+            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            setMonthlyData();
+        }else if (timeframe.equals("Yearly")){
+            chart.setTitle("Yearly Report");
+            chart.addLegend("Amount", Color.decode("#7b4397"), Color.decode("#dc2430"));
+            setYearlyData();
+        }else{
+           // JOptionPane.showMessageDialog(rootPane, "Please choose a timeframe");
+        }
+       
         
         //chart.addLegend("Cost", Color.decode("#e65c00"), Color.decode("#F9D423"));
         //chart.addLegend("Profit", Color.decode("#0099F7"), Color.decode("#F11712"));
@@ -54,8 +76,6 @@ public class DailyReport extends javax.swing.JFrame {
         panelShadow1 = new raven.panel.PanelShadow();
         chart = new raven.chart.CurveLineChart();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         panelShadow1.setBackground(new java.awt.Color(34, 59, 68));
         panelShadow1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelShadow1.setColorGradient(new java.awt.Color(17, 37, 45));
@@ -66,7 +86,7 @@ public class DailyReport extends javax.swing.JFrame {
             panelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelShadow1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(chart, javax.swing.GroupLayout.DEFAULT_SIZE, 739, Short.MAX_VALUE)
+                .addComponent(chart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelShadow1Layout.setVerticalGroup(
@@ -77,17 +97,17 @@ public class DailyReport extends javax.swing.JFrame {
                 .addGap(263, 263, 263))
         );
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelShadow1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 1, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelShadow1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGap(0, 1, Short.MAX_VALUE)
         );
 
         pack();
@@ -410,21 +430,23 @@ for (Map.Entry<String, Double> entry : yearlySalesData.entrySet()) {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DailyReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DailyReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DailyReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DailyReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DailyReport().setVisible(true);
+                new Report(timeframe).setVisible(true);
             }
         });
     }

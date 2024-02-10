@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -47,6 +49,23 @@ public class Checkout extends javax.swing.JFrame {
         
         initComponents();
         initTotalAmount(totalAmountCon);
+        
+        jTextField2.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e){
+                updateChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent arg0) {
+               updateChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent arg0) {
+              updateChange();//To change body of generated methods, choose Tools | Templates.
+            }
+        });
     }
 
     /**
@@ -59,6 +78,7 @@ public class Checkout extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -67,8 +87,11 @@ public class Checkout extends javax.swing.JFrame {
         jTextField3 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
 
         jLabel4.setText("jLabel4");
+
+        jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,26 +114,33 @@ public class Checkout extends javax.swing.JFrame {
             }
         });
 
-        jTextField3.setText("jTextField3");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(0, 153, 51));
         jButton1.setText("PURCHASE");
+        jButton1.setOpaque(true);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(0, 51, 153));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("PRINT RECIEPT");
+        jButton2.setOpaque(true);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jLabel6.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
+        jLabel6.setText("CHECKOUT");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,32 +148,38 @@ public class Checkout extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(27, 27, 27))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(131, 131, 131)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(54, 54, 54)
+                                .addComponent(jTextField3))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(82, 82, 82)
+                                .addComponent(jTextField2))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addGap(27, 27, 27))))
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabel6)))
+                .addContainerGap(137, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel6)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -155,7 +191,7 @@ public class Checkout extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -167,6 +203,21 @@ public class Checkout extends javax.swing.JFrame {
 
     private void initTotalAmount (double totalAmount){
         jTextField1.setText(String.valueOf(totalAmount));
+    }
+    private void updateChange(){
+        try{
+            double cash = Double.parseDouble(jTextField2.getText());
+            double totalAmount = Double.parseDouble(jTextField1.getText());
+            
+            if(cash>= totalAmount){
+                double change = cash - totalAmount;
+                jTextField3.setText(String.valueOf(change));
+            }else{
+                jTextField3.setText("Insufficient Funds");
+            }
+        }catch(NumberFormatException ex){
+            jTextField3.setText("Invalid input");
+        }
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         PrinterJob pj = PrinterJob.getPrinterJob();        
@@ -204,7 +255,7 @@ public class Checkout extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jTextField2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTextField2PropertyChange
-       jTextField3.setText("a");
+       
     }//GEN-LAST:event_jTextField2PropertyChange
 
     public PageFormat getPageFormat(PrinterJob pj){
@@ -261,11 +312,11 @@ public class Checkout extends javax.swing.JFrame {
             g2d.setFont(new Font("Monospaced",Font.PLAIN,9));
             g2d.drawImage(icon.getImage(), 50, 20, 90, 30, rootPane);y+=yShift+30;
             g2d.drawString("-------------------------------------",12,y);y+=yShift;
-            g2d.drawString("         CodeGuid.com        ",12,y);y+=yShift;
+            g2d.drawString("         COOPERATIVE POINT OF SALES        ",12,y);y+=yShift;
             g2d.drawString("   No 00000 Address Line One ",12,y);y+=yShift;
             g2d.drawString("   Address Line 02 SRI LANKA ",12,y);y+=yShift;
-            g2d.drawString("   www.facebook.com/CodeGuid ",12,y);y+=yShift;
-            g2d.drawString("        +94700000000      ",12,y);y+=yShift;
+            g2d.drawString("   www.facebook.com/cooppos ",12,y);y+=yShift;
+            g2d.drawString("        +00000777777      ",12,y);y+=yShift;
             g2d.drawString("-------------------------------------",12,y);y+=headerRectHeight;
 
             g2d.drawString(" Item Name           Price   ",10,y);y+=yShift;
@@ -299,8 +350,8 @@ public class Checkout extends javax.swing.JFrame {
             g2d.drawString("*************************************",10,y);y+=yShift;
             g2d.drawString("       THANK YOU COME AGAIN            ",10,y);y+=yShift;
             g2d.drawString("*************************************",10,y);y+=yShift;
-            g2d.drawString("       SOFTWARE BY:CODEGUID          ",10,y);y+=yShift;
-            g2d.drawString("   CONTACT: contact@codeguid.com       ",10,y);y+=yShift;       
+            g2d.drawString("       SOFTWARE BY:PRINCE IBEKWE          ",10,y);y+=yShift;
+            g2d.drawString("   CONTACT: zuvec00@gmail.com       ",10,y);y+=yShift;       
            
 
     }
@@ -609,6 +660,8 @@ public class Checkout extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
